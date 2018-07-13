@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pprint
 
+from scotus import oyez_api
+
 SKILL_NAME = "SCOTUS at Home"
 FALLBACK_MESSAGE = "Fallback!"
 HELP_MESSAGE = "Help!"
@@ -30,7 +32,7 @@ def on_intent(request, session):
 
     # process the intents
     if intent_name == "PlayOralArgsIntent":
-        return get_oral_arguments_response()
+        return get_oral_arguments_response(request)
     elif intent_name == "AMAZON.HelpIntent":
         return get_help_response()
     elif intent_name == "AMAZON.StopIntent":
@@ -42,13 +44,17 @@ def on_intent(request, session):
     else:
         return get_help_response()
 
-def get_oral_arguments_response():
-    print('Doing arguments response!')
-    return response(speech_response("Hello, from SCOTUS at Home", True))
+def get_oral_arguments_response(request):
+    slots = request["intent"].get("slots", {})
+    if "case" not in slots:
+        return get_help_response()
+
+    case_value = slots["case"]["value"]
+    pprint.pprint(oyez_api.search(case_value))
+    return response(speech_response(case_value, True))
 
 def get_help_response():
     """ get and return the help string  """
-    print('Doing help response!')
     speech_message = HELP_MESSAGE
     return response(speech_response_prompt(speech_message, speech_message, False))
 
