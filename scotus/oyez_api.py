@@ -24,7 +24,3 @@ def cases(term):
 def case(term, docket_num):
     path = "cases/{}/{}".format(term, docket_num)
     return __get(path)
-
-def transcript_data(term, docket_num):
-    case_data = case(term, docket_num)
-    return [ requests.get(data["href"]).json() for data in case_data["oral_argument_audio"] ]

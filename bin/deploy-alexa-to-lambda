@@ -1,0 +1,15 @@
+#!/bin/sh
+
+rm -rf tmp/build
+mkdir -p tmp/build
+
+cp -R alexa tmp/build/
+cp -R scotus tmp/build/
+
+pip install -r requirements.txt -t tmp/build
+
+zip -r tmp/build.zip tmp/build
+
+#aws lambda update-function-code --function-name scotus_at_home \
+#  --zip-file tmp/build.zip
+#  --publish
