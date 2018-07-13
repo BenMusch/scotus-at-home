@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+import pprint
 
 SKILL_NAME = "SCOTUS at Home"
+FALLBACK_MESSAGE = "Fallback!"
+HELP_MESSAGE = "Help!"
+STOP_MESSAGE = "Stop!"
 
 # --------------- App entry point -----------------
 
@@ -25,7 +29,7 @@ def on_intent(request, session):
     intent_name = request['intent']['name']
 
     # process the intents
-    if intent_name == "GetOralArgumentsIntent":
+    if intent_name == "PlayOralArgsIntent":
         return get_oral_arguments_response()
     elif intent_name == "AMAZON.HelpIntent":
         return get_help_response()
@@ -39,15 +43,15 @@ def on_intent(request, session):
         return get_help_response()
 
 def get_oral_arguments_response():
-    return response(speech_response_with_card(SKILL_NAME, "Hello, from SCOTUS at Home",
-                                                          "Hello, world!", True))
+    print('Doing arguments response!')
+    return response(speech_response("Hello, from SCOTUS at Home", True))
 
 def get_help_response():
     """ get and return the help string  """
-
+    print('Doing help response!')
     speech_message = HELP_MESSAGE
-    return response(speech_response_prompt(speech_message,
-                                                       speech_message, False))
+    return response(speech_response_prompt(speech_message, speech_message, False))
+
 def get_launch_response():
     """ get and return the help string  """
 
