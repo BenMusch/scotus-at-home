@@ -50,8 +50,14 @@ def get_oral_arguments_response(request):
         return get_help_response()
 
     case_value = slots["case"]["value"]
-    pprint.pprint(oyez_api.search(case_value))
-    return response(speech_response(case_value, True))
+    search_results = oyez_api.search(case_value)
+    to_say = ""
+    if search_results:
+        to_say = "Found the following docket numbers for {}: {}".format(case_value, ", ".join(search_results))
+    else:
+        to_say = "Could not find any cases with the search '{}'".format(case_value)
+
+    return response(speech_response(to_say, True))
 
 def get_help_response():
     """ get and return the help string  """
